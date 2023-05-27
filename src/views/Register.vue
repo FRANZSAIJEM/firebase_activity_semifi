@@ -39,16 +39,17 @@
                       <label for="emailAdress" class="text-center" style="font-size: 20px;">Email Address:</label> <br>
                       <input v-model="emailAddress" type="email" name="" id="" class="form-control total">
                       <br>
-                    
-
-                      <label for="contactNumber" class="text-center" style="font-size: 20px;">Contact Number:</label> <br>
-                      <input v-model="contactNumber" type="number" name="" id="" class="form-control total"> 
-                      <br>
 
                       <label for="password" class="text-center" style="font-size: 20px;">Password:</label> <br>
                       <input v-model="password" type="password" name="" id="" class="form-control total">
                       <br>
-            
+                    
+
+                      <label for="confirmPassword" class="text-center" style="font-size: 20px;">Confirm Password:</label> <br>
+                      <input v-model="confirmPassword" type="password" name="" id="" class="form-control total">
+                      <br>
+
+                      
                       <RouterLink to="/login" class="nav-link active" style="width: 250px;">Already have an account?</RouterLink>
          
                       <button @click="register()" class="btn btn-primary float-right" style="transform: translateY(-30px);"><h5>Register</h5></button>
@@ -78,8 +79,9 @@ const fullName = ref('')
 const address = ref('')
 const gender = ref('')
 const emailAddress = ref('')
-const contactNumber = ref('')
+
 const password = ref('')
+const confirmPassword = ref('');
 
 
 const error = ref('')
@@ -94,7 +96,13 @@ const verified = ref('')
 const register = async () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (fullName.value !== '' && address.value !== '' && gender.value !== '' && emailAddress.value !== '' && contactNumber.value !== null && password !== '') {
+  if (fullName.value !== '' && address.value !== '' && gender.value !== '' && emailAddress.value !== '' && password !== '') {
+      if (password.value !== confirmPassword.value) {
+      error.value = true;
+      errorMsg.value = 'Passwords do not match.';
+      return;
+    }
+
     if (!emailRegex.test(emailAddress.value)) {
       error.value = true;
       errorMsg.value = 'FirebaseError: Firebase: Error (auth/invalid-email).';
@@ -104,22 +112,21 @@ const register = async () => {
     try {
       const { user } = await createUserWithEmailAndPassword(auth, emailAddress.value, password.value);
       
-      await addDoc(collection(db, "midterm"), {
+      await addDoc(collection(db, "author"), {
         fullName: fullName.value,
         address: address.value,
         gender: gender.value,
         emailAddress: emailAddress.value,
-        contactNumber: contactNumber.value,
         uid: user.uid,
         completed: false
       });
 
-      sendEmailVerification(user);
+      // sendEmailVerification(user);
 
       error.value = false;
       success.value = true;
       successMsg.value = 'Registered Successfully.';
-      verified.value = 'A verification link has been sent to your email.';
+      // verified.value = 'A verification link has been sent to your email.';
 
 
 
@@ -127,7 +134,7 @@ const register = async () => {
       address.value = '';
       gender.value = '';
       emailAddress.value = '';
-      contactNumber.value = null;
+
       password.value = null;
 
     } catch (error) {

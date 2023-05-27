@@ -13,7 +13,7 @@
                           {{ successMsg }}
                       </div>
                 </div>
-              <div style="width: 500px;">
+                <div style="width: 500px;">
                       <h1>Login</h1>
                       <label for="emailAddress" class="text-center" style="font-size: 20px;">Email Address:</label> <br>
                       <input v-model="emailAddress" type="text" name="" id="" class="form-control total"> 
@@ -72,33 +72,31 @@ const error = ref('')
 const errorMsg = ref('')
 
 const login = () => {
+ 
+ if(emailAddress.value != '' && password.value != ''){
 
+   signInWithEmailAndPassword(auth, emailAddress.value, password.value)
+   .then((cred)=>{
+   router.push('/home')
 
+ })
+ .catch((err)=>{
+   error.value = true
+   errorMsg.value = err.message
+ })
+ }
+ else{
+   error.value = true;
+   errorMsg.value = 'Please fill all the fields';
+ }
 
-    signInWithEmailAndPassword(auth, emailAddress.value, password.value)
-    .then((cred)=>{
-      if(cred.user.emailVerified){
-        router.push('/dashboard')
-      }else{
-        error.value = true
-        errorMsg.value = 'Your account is not yet verified.'
-        emailAddress.value = ''
-        password.value = ''
-      }
-    
-
-  })
-  .catch((err)=>{
-    error.value = true
-    errorMsg.value = err
-  })
 }
 
 const signInWithGoogle = () => {
   const provider = new GoogleAuthProvider()
   signInWithPopup(auth, provider)
   .then((cred)=>{
-    router.push('/dashboard')
+    router.push('/home')
   })
   .catch((err) => {
     error.value = true

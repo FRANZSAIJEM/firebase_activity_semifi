@@ -3,6 +3,11 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Home from '../views/Home.vue'
+import Myposts from '../views/Myposts.vue'
+import Createposts from '../views/Createposts.vue'
+import Viewedpost from '../views/Viewedpost.vue'
+
+
 
 
 
@@ -20,16 +25,39 @@ const router = createRouter({
       name: 'log',
       component: Login
     },
-    {
-      path: '/dashboard',
-      name: 'dash',
-      component: Dashboard
-    },
+
     {
       path: '/home',
       name: 'home',
       component: Home
     },
+
+    {
+      path: '/dashboard',
+      name: 'dash',
+      component: Dashboard
+    },
+
+    {
+      path: '/myposts',
+      name: 'mypost',
+      component: Myposts
+    },
+
+    {
+      path: '/createposts',
+      name: 'createpost',
+      component: Createposts
+    },
+
+    {
+       path: '/:uid/view-author',
+      name: 'viewed',
+      component: Viewedpost,
+      props: true
+    }
+    
+  
   
   ]
 })
